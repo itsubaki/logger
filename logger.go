@@ -37,7 +37,7 @@ func MustSetup(projectID, serviceName, revision string) func() error {
 func Setup(projectID, serviceName, revision string) (func() error, error) {
 	f, err := NewLoggerFactory(context.Background(), projectID, serviceName, revision)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("new logger factory: %v", err)
 	}
 
 	Factory = f
