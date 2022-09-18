@@ -30,6 +30,10 @@ var (
 	Factory  = &LoggerFactory{}
 )
 
+func MustSetup(projectID, serviceName, revision string) func() error {
+	return Must(Setup(projectID, serviceName, revision))
+}
+
 func Setup(projectID, serviceName, revision string) (func() error, error) {
 	f, err := NewLoggerFactory(context.Background(), projectID, serviceName, revision)
 	if err != nil {
@@ -42,14 +46,6 @@ func Setup(projectID, serviceName, revision string) (func() error, error) {
 
 func New(req *http.Request, traceID, spanID string) *Logger {
 	return Factory.New(req, traceID, spanID)
-}
-
-func Default(v, w string) string {
-	if v != "" {
-		return v
-	}
-
-	return w
 }
 
 type Logger struct {
@@ -133,4 +129,20 @@ func (l *Logger) Span(span trace.Span) *Logger {
 		errC:    l.errC,
 		req:     l.req,
 	}
+}
+
+func Must(f func() error, err error) func() error {
+	if err != nil {
+		panic(err)
+	}
+
+	return f
+}
+
+func Default(v, w string) string {
+	if v != "" {
+		return v
+	}
+
+	return w
 }

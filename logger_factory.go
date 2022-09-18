@@ -15,14 +15,6 @@ type LoggerFactory struct {
 	errC      *errorreporting.Client
 }
 
-func Must(f *LoggerFactory, err error) *LoggerFactory {
-	if err != nil {
-		panic(err)
-	}
-
-	return f
-}
-
 func NewLoggerFactory(ctx context.Context, projectID, serviceName, revision string) (*LoggerFactory, error) {
 	c, err := errorreporting.NewClient(ctx, projectID, errorreporting.Config{
 		ServiceName:    serviceName,
