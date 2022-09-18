@@ -30,8 +30,14 @@ var (
 	Factory  = &LoggerFactory{}
 )
 
-func Setup(projectID, serviceName, revision string) {
-	Factory = Must(NewLoggerFactory(context.Background(), projectID, serviceName, revision))
+func Setup(projectID, serviceName, revision string) (func() error, error) {
+	f, err := NewLoggerFactory(context.Background(), projectID, serviceName, revision)
+	if err != nil {
+		return nil, err
+	}
+
+	Factory = f
+	return f.Close, nil
 }
 
 func New(req *http.Request, traceID, spanID string) *Logger {
