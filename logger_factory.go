@@ -4,16 +4,9 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"os"
 	"strconv"
 
 	"cloud.google.com/go/errorreporting"
-)
-
-var (
-	serviceName = os.Getenv("K_SERVICE")  // https://cloud.google.com/run/docs/container-contract?hl=ja#services-env-vars
-	revision    = os.Getenv("K_REVISION") // https://cloud.google.com/run/docs/container-contract?hl=ja#services-env-vars
-	loglevel    = LogLevel(os.Getenv("LOG_LEVEL"), "0")
 )
 
 type LoggerFactory struct {
@@ -30,15 +23,7 @@ func Must(f *LoggerFactory, err error) *LoggerFactory {
 	return f
 }
 
-func LogLevel(v, w string) string {
-	if v == "" {
-		return w
-	}
-
-	return v
-}
-
-func NewLoggerFactory(ctx context.Context, projectID string) (*LoggerFactory, error) {
+func NewLoggerFactory(ctx context.Context, projectID, serviceName, revision string) (*LoggerFactory, error) {
 	c, err := errorreporting.NewClient(ctx, projectID, errorreporting.Config{
 		ServiceName:    serviceName,
 		ServiceVersion: revision,

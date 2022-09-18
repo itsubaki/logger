@@ -26,12 +26,23 @@ const (
 )
 
 var (
-	projectID = os.Getenv("PROJECT_ID")
-	Factory   = Must(NewLoggerFactory(context.Background(), projectID))
+	projectID   = os.Getenv("PROJECT_ID")
+	serviceName = os.Getenv("K_SERVICE")  // https://cloud.google.com/run/docs/container-contract?hl=ja#services-env-vars
+	revision    = os.Getenv("K_REVISION") // https://cloud.google.com/run/docs/container-contract?hl=ja#services-env-vars
+	loglevel    = Default(os.Getenv("LOG_LEVEL"), "0")
+	Factory     = Must(NewLoggerFactory(context.Background(), projectID, serviceName, revision))
 )
 
 func New(req *http.Request, traceID, spanID string) *Logger {
 	return Factory.New(req, traceID, spanID)
+}
+
+func Default(v, w string) string {
+	if v != "" {
+		return v
+	}
+
+	return w
 }
 
 type Logger struct {
