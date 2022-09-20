@@ -104,6 +104,14 @@ func (l *Logger) Info(format string, a ...interface{}) {
 	l.Log("Info", format, a...)
 }
 
+func (l *Logger) Warn(format string, a ...interface{}){
+	if l.level > WARNING {
+		return
+	}
+
+	l.Log("Warning", format,a...)
+}
+
 func (l *Logger) Error(format string, a ...interface{}) {
 	if l.level > ERROR {
 		return
