@@ -27,7 +27,7 @@ const (
 
 var (
 	loglevel = Default(os.Getenv("LOG_LEVEL"), "0")
-	Factory  = &LoggerFactory{}
+	factory  = &LoggerFactory{}
 )
 
 func MustSetup(projectID, serviceName, revision string) func() error {
@@ -40,12 +40,12 @@ func Setup(projectID, serviceName, revision string) (func() error, error) {
 		return nil, fmt.Errorf("new logger factory: %v", err)
 	}
 
-	Factory = f
+	factory = f
 	return f.Close, nil
 }
 
 func New(req *http.Request, traceID, spanID string) *Logger {
-	return Factory.New(req, traceID, spanID)
+	return factory.New(req, traceID, spanID)
 }
 
 type Logger struct {
