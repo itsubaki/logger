@@ -129,11 +129,15 @@ func (l *Logger) ErrorReport(format string, a ...interface{}) {
 	l.Report(a...)
 }
 
-func (l *Logger) Span(span trace.Span) *Logger {
+func (l *Logger) S(s trace.Span) *Logger {
+	return l.Span(s)
+}
+
+func (l *Logger) Span(s trace.Span) *Logger {
 	return &Logger{
 		level:   l.level,
 		traceID: l.traceID,
-		spanID:  span.SpanContext().SpanID().String(),
+		spanID:  s.SpanContext().SpanID().String(),
 		errC:    l.errC,
 		req:     l.req,
 	}
