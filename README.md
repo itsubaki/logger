@@ -1,7 +1,8 @@
 # logger
 
+Example of using gin-gonic/gin.
+
 ```go
-// Here's an example of using gin-gonic/gin.
 func Func(c *gin.Context) {
 	traceID := c.GetString("trace_id")
 	spanID := c.GetString("span_id")
