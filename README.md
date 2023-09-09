@@ -3,6 +3,17 @@
 Example of using gin-gonic/gin.
 
 ```go
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/itsubaki/logger"
+	"github.com/itsubaki/tracer"
+	"go.opentelemetry.io/otel"
+)
+
+var tr = otel.Tracer("mypackage/myfunc")
+
 func Func(c *gin.Context) {
 	traceID := c.GetString("trace_id")
 	spanID := c.GetString("span_id")
